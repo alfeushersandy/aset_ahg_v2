@@ -147,6 +147,15 @@
         $.get(url)
             .done((response) => {
                 console.log(response)
+                if(response.id_kategori == 5){
+                    $('#modal-form .btn-primary').text('Next');
+                    $('#modal-form .btn-primary').on('click', function(){
+                        $('#modal-form').modal('hide');
+                        $('#modal-form-ban').modal('show');
+                    });
+                }else{
+                    $('#modal-form .btn-primary').html('<i class="fa fa-save"></i> Simpan');
+                }
                 $('#modal-form [name=nama_barang]').val(response.nama_barang);
                 $('#modal-form [name=id_kategori]').val(response.id_kategori);
                 $('#modal-form [name=merk]').val(response.merk);
