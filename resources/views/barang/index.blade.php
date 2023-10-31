@@ -80,27 +80,29 @@
                             $('#modal-form-ban').modal('show');
                             $('#modal-form-ban .modal-body').empty();
                             let stock = response.produk.stok;
+                            for (let index = 0; index < stock; index++) {
                             $('#modal-form-ban .modal-body').append(`
                             <div class="after-add-more mt-2">
                                 <div class="row">
                                     <div class="col-lg-3">
-                                        <input type="text" name="nomor_seri[]" id="nomor_seri[]" class="form-control" placeholder="nomor seri">
+                                        <input type="text" name="ban[${index}]['nomor_seri']" id="nomor_seri[]" class="form-control" placeholder="nomor seri">
                                     </div>
                                     <div class="col-lg-3">
-                                        <input type="text" name="stamp_ban[]" id="stamp_ban[]" class="form-control" placeholder="stamp ban">
+                                        <input type="text" name="ban[${index}]['stamp_ban']" id="stamp_ban[]" class="form-control" placeholder="stamp ban">
                                     </div>
                                     <div class="col-lg-3">
-                                        <input type="text" name="no_po[]" id="no_po[]" class="form-control" placeholder="Nomor PO">
+                                        <input type="text" name="ban[${index}]['no_po']" id="no_po[]" class="form-control" placeholder="Nomor PO">
                                     </div>
                                     <div class="col-lg-3">
-                                        <input type="date" name="tgl_datang[]" id="tgl_datang[]" class="form-control" placeholder="tanggal datang">
+                                        <input type="date" name="ban[${index}]['tgl_datang']" id="tgl_datang[]" class="form-control" placeholder="tanggal datang">
                                     </div>
                                 </div>
                             </div>
-                            <button onclick="tambah(${stock})" class="btn btn-success mt-3 tambah-form" type="button"> Add
-                            </button>
-                    `)
+                            `)}
                             
+                        }else{
+                            $('#modal-form').modal('hide');
+                            table.ajax.reload();
                         }
                     })
                     .fail((errors) => {
@@ -120,18 +122,6 @@
         });
     });
 
-    
-
-    function tambah(stock){
-        var maxField = stock;
-        var html = $(".after-add-more").html();
-        if(form < maxField){
-            $(".after-add-more").after(html); 
-            form++
-        }else{
-            alert('A maximum of '+maxField+' fields are allowed to be added. ');
-        }
-    }
 
     function addForm(url) {
         $('#modal-form').modal('show');

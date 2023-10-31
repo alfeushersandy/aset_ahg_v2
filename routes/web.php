@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BanController;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\LokasiController;
@@ -28,3 +29,5 @@ Route::resource('/lokasi', LokasiController::class);
 
 Route::get('/barang/data', [BarangController::class, 'data'])->name('barang.data');
 Route::resource('/barang', BarangController::class);
+
+Route::resource('/ban', BanController::class);
