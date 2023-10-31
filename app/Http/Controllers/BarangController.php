@@ -76,7 +76,10 @@ class BarangController extends Controller
             return response()->json('Data berhasil disimpan', 200);
         }else{
             session(['produk' => $request->all(), 'id_barang' => $id_barang]);
-            return response()->json('Data berhasil disimpan', 200);
+            return response()->json([
+                'produk' => session('produk'),
+                'id_barang' => session('id_barang')
+            ]);
         }
     }
 

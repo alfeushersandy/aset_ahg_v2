@@ -38,12 +38,14 @@
             </div>
         </div>
     </div>
-@includeIf('barang.form')
+@include('barang.form_ban')
+@include('barang.form')
 @endsection
 
 @push('scripts')
 <script type="text/javascript">
     let table;
+    let form = 1
     
         $(document).ready(function(){
             table = $('#tbl_list').DataTable({
@@ -72,8 +74,34 @@
             if (! e.preventDefault()) {
                 $.post($('#modal-form form').attr('action'), $('#modal-form form').serialize())
                     .done((response) => {
-                        $('#modal-form').modal('hide');
-                        table.ajax.reload();
+                        form = 1
+                        if(response.produk.id_kategori == 5){
+                            $('#modal-form').modal('hide');
+                            $('#modal-form-ban').modal('show');
+                            $('#modal-form-ban .modal-body').empty();
+                            let stock = response.produk.stok;
+                            $('#modal-form-ban .modal-body').append(`
+                            <div class="after-add-more mt-2">
+                                <div class="row">
+                                    <div class="col-lg-3">
+                                        <input type="text" name="nomor_seri[]" id="nomor_seri[]" class="form-control" placeholder="nomor seri">
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <input type="text" name="stamp_ban[]" id="stamp_ban[]" class="form-control" placeholder="stamp ban">
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <input type="text" name="no_po[]" id="no_po[]" class="form-control" placeholder="Nomor PO">
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <input type="date" name="tgl_datang[]" id="tgl_datang[]" class="form-control" placeholder="tanggal datang">
+                                    </div>
+                                </div>
+                            </div>
+                            <button onclick="tambah(${stock})" class="btn btn-success mt-3 tambah-form" type="button"> Add
+                            </button>
+                    `)
+                            
+                        }
                     })
                     .fail((errors) => {
                         alert('Tidak dapat menyimpan data');
@@ -81,7 +109,29 @@
                     });
             }
         });
+
+        $('[name=id_kategori]').on('change', function () {
+            let kategori = $('#modal-form [name=id_kategori]').val();
+            if(kategori == 5){ 
+                $('#modal-form .btn-primary').text('Next');
+            }else{
+                $('#modal-form .btn-primary').html('<i class="fa fa-save"></i> Simpan');
+            }
+        });
     });
+
+    
+
+    function tambah(stock){
+        var maxField = stock;
+        var html = $(".after-add-more").html();
+        if(form < maxField){
+            $(".after-add-more").after(html); 
+            form++
+        }else{
+            alert('A maximum of '+maxField+' fields are allowed to be added. ');
+        }
+    }
 
     function addForm(url) {
         $('#modal-form').modal('show');
